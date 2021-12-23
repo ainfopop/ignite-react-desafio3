@@ -1,14 +1,17 @@
-import Link from 'next/Link'
-import styles from './header.module.scss'
-export default function Header() {
-  return(
-      <header className={styles.headerSpacing}>
-        <Link href="/"> 
+import Link from 'next/link';
+import styles from './header.module.scss';
+
+export default function Header(): JSX.Element {
+  // TODO
+  return (
+    <header className={styles.container}>
+      <div>
+        <Link href="/">
           <a>
-            <img src="/logo.svg" alt="logo" />
+            <img src="/images/logo.svg" alt="Logo" />
           </a>
         </Link>
-      </header>
-  )
-
+      </div>
+    </header>
+  );
 }

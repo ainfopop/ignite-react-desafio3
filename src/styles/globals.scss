@@ -1,38 +1,43 @@
+@use 'common.module';
+
+$white: #f8f8f8;
+$gray-300: #d7d7d7;
+$gray-400: #bbb;
+$gray-900: #1a1d23;
+
+$max-width: 900px;
+
+:root {
+  --primary: #ff57b2;
+
+  --white: #{$white};
+  --gray-300: #{$gray-300};
+  --gray-400: #{$gray-400};
+  --gray-900: #{$gray-900};
+
+  --max-width: #{$max-width};
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-:root { 
-  --white:#F8F8F8;
-  --pink-100:#FF57B2;
-  --gray-100:#D7D7D7;
-  --gray-200:#BBBBBB;
-  --gray-800:#1A1D23;
+// TODO
+
+body {
+  background: var(--gray-900);
+  padding: 0 2rem;
+  font: 400 1rem 'Inter', sans-serif;
+  color: var(--white);
 }
 
-body{
-  background-color: var(--gray-800);
-  color:var(--white);
+button {
+  cursor: pointer;
 }
-@media (max-width: 1080px){
-  html {
-      font-size: 93.75%;
-  }
-}
-@media (max-width: 720px){
-  html {
-      font-size: 87.5%;
-  }
-}
-body,input,textarea,select,button {
-  font: 400 1rem "Inter",sans-serif;
-}
-button{
-  cursor:pointer;
-}
-a{
-  text-decoration:none;
+
+a {
   color: inherit;
+  text-decoration: none;
 }

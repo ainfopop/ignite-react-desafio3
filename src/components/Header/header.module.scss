@@ -1,7 +1,9 @@
-.headerSpacing{
-  margin: 4rem auto;
-  max-width: 700px;
-  display: flex; 
-  align-items: center;
-  align-content: center;
+// TODO
+.container {
+  padding: 5rem 0;
+
+  div {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
 }

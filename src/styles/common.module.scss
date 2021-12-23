@@ -1,4 +1,8 @@
-.container{
-  max-width: 700px;
-  margin:4rem auto; 
+// TODO
+
+$max-width: 1220px;
+
+.commonContainer {
+  max-width: var(--max-width);
+  margin: 0 auto;
 }

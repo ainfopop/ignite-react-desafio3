@@ -1,19 +1,18 @@
+import { format } from 'date-fns';
 import { GetStaticProps } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
 
+import { AiOutlineCalendar } from 'react-icons/ai';
+import { FiUser } from 'react-icons/fi';
+import ptBR from 'date-fns/locale/pt-BR';
 import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
-import Link from 'next/Link';
-import {BiUser} from 'react-icons/bi';
-import {AiOutlineCalendar} from 'react-icons/ai';
-import Prismic from '@prismicio/client'
-import React, { useState } from 'react';
-import format from 'date-fns/format';
-import { ptBR } from 'date-fns/locale';
-import Header from '../components/Header';
+
 interface Post {
-  uid?: string; 
+  uid?: string;
   first_publication_date: string | null;
   data: {
     title: string;
@@ -31,113 +30,71 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-export default function Home({ postsPagination }: HomeProps) {
-  // console.log('postsPagination',postsPagination.next_page)
+export default function Home(): JSX.Element {
+  // TODO
+  const fakePosts: Post[] = [
+    {
+      uid: '123',
+      first_publication_date: '2021-12-22T02:17:19.364Z',
+      data: {
+        author: 'J.K. Rowling',
+        title: 'Como utilizar Hooks',
+        subtitle: 'Pensando em sincronização em vez de ciclos de vida.',
+      },
+    },
+    {
+      uid: '123',
+      first_publication_date: '2021-12-22T02:17:19.364Z',
+      data: {
+        author: 'J.K. Rowling',
+        title: 'Criando um app CRA do zero',
+        subtitle:
+          'Tudo sobre como criar a sua primeira aplicação utilizando Create React App.',
+      },
+    },
+  ];
 
-  const PostsFormatted = postsPagination.results.map(post => {
-    return{
-      ...post,
-      first_publication_date: format(
-        new Date(post.first_publication_date),
-        "dd MMM yyyy",
-        {
-          locale:ptBR,
-        }
-      ),
-    }
+  return (
+    <>
+      <Head>
+        <title>spacetraveling | Home</title>
+      </Head>
+      <main className={`${commonStyles.commonContainer} ${styles.container}`}>
+        <div>
+          {fakePosts.map(post => (
+            <Link href="#nowhere" key={post.uid}>
+              <a>
+                <h2>{post.data.title}</h2>
+                <p>{post.data.subtitle}</p>
 
-  })
-
-  const [posts,setPosts] = useState<Post[]>(PostsFormatted);
-  const [nextPage,setNextPage] = useState(postsPagination.next_page);
-  const [nextPageExists,setNextPageExists] = useState(1)
-
-  async function handleNextPage() {
-    if(nextPageExists !== 1 && nextPage === null){
-      return;
-    }
-    const postsResult = await fetch(`${nextPage}`).then(response =>
-      response.json()
-    );
-    setNextPage(postsResult.next_page);
-    setNextPageExists(postsResult.page);
-
-
-    const loadNewPosts = postsResult.results.map(post=> {
-      return {
-        uid:post.uid,
-        first_publication_date: format(
-          new Date(post.first_publication_date),
-          "dd MMM yyyy",
-          {
-            locale:ptBR,
-          }
-        ),
-        data:{
-          title:post.data.title,
-          subtitle:post.data.subtitle,
-          author:post.data.author
-        }
-      }
-    })
-    setPosts([...posts,...loadNewPosts]);
-  }
-
-  return(
-    <div className={commonStyles.container}>
-    <Header />
-    {posts.map(post => (
-      <Link key={post.uid} href={`/post/${post.uid}`}>
-        <a className={styles.post}>
-          <strong>{post.data.title}</strong>
-          <p>{post.data.subtitle}</p>
-          <div className={styles.containerSmall}>
-            <time><AiOutlineCalendar />{post.first_publication_date}</time>
-            <small><BiUser/>{post.data.author}</small>
-          </div>
-        </a>
-      </Link>
-    ))}
-    {postsPagination.next_page !== null && (
-
-      <button type="button" className={styles.loadMore} onClick={handleNextPage}>Carregar mais posts</button>
-
-    )}
-  </div>
-  )
-
+                <div>
+                  <span>
+                    <AiOutlineCalendar strokeWidth="50" size="20" />
+                    {post.data.author}
+                  </span>
+                  <span>
+                    <FiUser strokeWidth="3" size="20" />
+                    {format(
+                      new Date(post.first_publication_date),
+                      'dd LLL yyyy',
+                      {
+                        locale: ptBR,
+                      }
+                    )}
+                  </span>
+                </div>
+              </a>
+            </Link>
+          ))}
+        </div>
+      </main>
+    </>
+  );
 }
 
-export const getStaticProps = async () => {
-  const prismic = getPrismicClient();
-  const postsResponse = await prismic.query(
-    [Prismic.predicates.at("document.type","posts",)],
-    {
-      pageSize:4,
-    }
-    );
+// export const getStaticProps = async () => {
+//   // const prismic = getPrismicClient();
+//   // const postsResponse = await prismic.query(TODO);
 
-    const posts = postsResponse.results.map(posts => {
-      return {
-        uid: posts.uid,
-        first_publication_date: posts.first_publication_date,
-        data: {
-          title: posts.data.title,
-          subtitle: posts.data.subtitle,
-          author:posts.data.author,
-        }
-      }
-    })
-    const postsPagination = {
-      next_page:postsResponse.next_page,
-      results:posts,
-    }
-
-    return {
-      props:{
-        postsPagination,
-      }
-    }
-
-
-};
+//   // TODO
+// };
